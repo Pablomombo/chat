@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Socket.IO chat</title>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <!--<style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font: 13px Helvetica, Arial; }
+            form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+            form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+            form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+            #messages { list-style-type: none; margin: 0; padding: 0; }
+            #messages li { padding: 5px 10px; }
+            #messages li:nth-child(odd) { background: #eee; }
+            #messages { margin-bottom: 40px }
+        </style>-->
+    </head>
+    <body>
+        <h1>Chat Chat Chat</h1>
+        <div class="jumbotron">
+            <h1 class="display-4">Send Message</h1>
+            <br>
+            <input id = "name" class="form-control" placeholder="Name">
+            <br>
+            <textarea id = "message" class="form-control" placeholder="Your Message Here"></textarea>
+            <br>
+            <button id="send" class="btn btn-success">Send</button>
+        </div>
+        <!--<ul id="messages"></ul>
+        <form action="">
+            <input id="m" autocomplete="off" /><button>Send</button>
+        </form>-->
+        <script>
+            $(function () {
+                var socket = io();
+                var pseudo = prompt('what is your pseudo?');
+
+                socket.emit('new client', pseudo);
+
+                $('form').submit(function(){
+                    socket.emit('message', $('#m').val());
+                    $('#m').val('');
+                    return false;
+                });
+                socket.on('message', function(msg){
+                    $('#messages').append($('<li>').text(msg));
+                    window.scrollTo(0, document.body.scrollHeight);
+                });
+            });
+        </script>
+    </body>
+</html>

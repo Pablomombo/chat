@@ -1,34 +1,54 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
 
-class ChatInput extends Component {
-    static propTypes = {
-        onSubmitMessage: PropTypes.func.isRequired,
-    }
-    state = {
-        message: '',
+class ChatInput extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            username : ''
+        }
     }
 
-    render() {
-        return (
-        <form
-            action="."
-            onSubmit={e => {
-            e.preventDefault()
-            this.props.onSubmitMessage(this.state.message)
-            this.setState({ message: '' })
-            }}
-        >
-            <input
-            type="text"
-            placeholder={'Enter message...'}
-            value={this.state.message}
-            onChange={e => this.setState({ message: e.target.value })}
-            />
-            <input type="submit" value={'Send'} />
-        </form>
+    changeUsername(e){
+        e.preventDefault();
+        if(this.state.username.length){
+            this.props.setUsername(this.state.username);
+        } else {
+            alert('Please provide a username');
+        }
+    }
+
+    onChange(e){
+        this.setState({
+            username : e.target.value
+        })
+    }
+
+    render(){
+        return(
+            <div className="enter-chat d-flex justify-content-center align-items-center">
+                <form className="col-xs-12 col-sm-12 col-md-6 col-lg-4" onSubmit={this.changeUsername.bind(this)}>
+                    <React.Fragment>
+                        <div className="input-group ">
+                            <input
+                                className="form-control"
+                                placeholder="Username"
+                                value={this.state.username}
+                                onChange={this.onChange.bind(this)}
+                            />
+                            <div className="input-group-append">
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    type="submit">
+                                    Join
+                                </button>
+                            </div>
+                        </div>
+                    </React.Fragment>
+                </form>
+            </div>
         )
     }
 }
 
-export default ChatInput
+export default ChatInput;

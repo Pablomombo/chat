@@ -11,7 +11,7 @@ class Chat extends Component {
         this.socket = null;
         this.state = {
             username : localStorage.getItem('username') ? localStorage.getItem('username') : '',
-            uid : localStorage.getItem('uid') ? localStorage.getItem('uid') : this.generateUID(),
+            id : localStorage.getItem('id') ? localStorage.getItem('id') : this.generateID(),
             chat_ready : false,
             users : [],
             messages : [],
@@ -25,13 +25,13 @@ class Chat extends Component {
         }
     }
 
-    generateUID(){
+    generateID(){
         let text = '';
         const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for (let i = 0; i < 12; i++){
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
-        localStorage.setItem('uid', text);
+        localStorage.setItem('id', text);
         return text;
     }
 
@@ -48,13 +48,13 @@ class Chat extends Component {
         this.setState({
             messages : this.state.messages.concat([{
                username : localStorage.getItem('username'),
-               uid : localStorage.getItem('uid'),
+               uid : localStorage.getItem('id'),
                message : message,
            }])
         });
         this.socket.emit('message', {
             username : localStorage.getItem('username'),
-            uid : localStorage.getItem('uid'),
+            uid : localStorage.getItem('id'),
             message : message,
         });
         this.scrollToBottom();
@@ -70,8 +70,8 @@ class Chat extends Component {
         this.setState({
             chat_ready : true,
         });
-        this.socket = socketIOClient('ws://localhost:8989', {
-            query : 'username='+this.state.username+'&uid='+this.state.uid
+        this.socket = socketIOClient('http://localhost:3000', {
+            query : 'username='+this.state.username+'&uid='+this.state.id
         });
 
         this.socket.on('updateUsersList', function (users) {
